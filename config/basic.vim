@@ -36,7 +36,7 @@ set ttimeoutlen=100 " wait up to 100ms after Esc for special key
 
 set display=lastline
 set cursorline  " When there is a previous search pattern
-"set cursorcolumn
+set cursorcolumn
 
 set showmatch  " When a bracket is inserted, briefly jump to the matching one.
 
@@ -85,6 +85,7 @@ set et        " Insert Mode,use spaces to insert a <Tab>
 set sw=4    " 1 tab = 4 spaces
 set ts=4        " Number of spaces that a <Tab> in the file count for
 set tw=120    " Text width maxmum chars before wrapping
+set cc=+1    " highlight column after 'textwidth'
 
 " softtabstop: Number of spaces that a <Tab> counts for while
 " performing editing operatoions. in fact mix of spaces and <Tab>s
