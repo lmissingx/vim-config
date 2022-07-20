@@ -1,7 +1,7 @@
 " ========== 默认情况下的分组，可以再前面覆盖之 ==========
 if !exists('g:plugin_group')
-	let g:plugin_group = ['startup', 'airline', 'dirvish', 'git', 'easymotion']
-    let g:plugin_group += ['searching']
+	let g:plugin_group = ['startup', 'theme', 'dirvish', 'git', 'easymotion']
+    let g:plugin_group += ['searching', 'textobj', 'filetypes']
 	let g:plugin_group += ['tags', 'nerdtree', 'ale']
 	"let g:plugin_group += ['leaderf']
 
@@ -24,78 +24,73 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 "----------------------------------------------------------------------
 " 基础插件
 "----------------------------------------------------------------------
-if index(g:plugin_group, 'startup') >= 0
+if index(g:plugin_group, 'startup') == 0
    " 展示开始画面，显示最近编辑过的文件
-   Plug 'mhinz/vim-startify'
+   "Plug 'mhinz/vim-startify'
 " {
-    let g:startify_session_dir = '~/.vim/session'
+    "let g:startify_session_dir = '~/.vim/session'
 
     " Show modified and untracked git files
     " returns all modified files of the current git repo
     " `2>/dev/null` makes the command fail quietly, so that when we are not
     " in a git repo, the list will be empty
-    function! s:gitModified()
-        let files = systemlist('git ls-files -m 2>/dev/null')
-        return map(files, "{'line': v:val, 'path': v:val}")
-    endfunction
+   " function! s:gitModified()
+   "     let files = systemlist('git ls-files -m 2>/dev/null')
+   "     return map(files, 
+   "     {'line': v:val, 'path': v:val}")
+   " endfunction
 
     " same as above, but show untracked files, honouring .gitignore
-    function! s:gitUntracked()
-        let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
-        return map(files, "{'line': v:val, 'path': v:val}")
-    endfunction
+    "function! s:gitUntracked()
+    "    let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
+    "    return map(files, 
+    "    {'line': v:val, 'path': v:val}")
+    "endfunction
 
-    let g:startify_lists = [
-        \ { 'type': 'files',     'header': ['   MRU']            },
-        \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-        \ { 'type': 'sessions',  'header': ['   Sessions']       },
-        \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-        \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
-        \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
-        \ { 'type': 'commands',  'header': ['   Commands']       },
-        \ ]
+    "let g:startify_lists = [
+    "    \ { 'type': 'files',     'header': ['   MRU']            },
+    "    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    "    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    "    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    "    \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
+    "    \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
+    "    \ { 'type': 'commands',  'header': ['   Commands']       },
+    "    \ ]
 
     " Use NERDTree bookmarks
-    let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+    "let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
     " Display NERDTree bookmarks as a separate list
     " Read ~/.NERDTreeBookmarks file and takes its second column
-    function! s:nerdtreeBookmarks()
-        let bookmarks = systemlist("cut -d' ' -f 2- ~/.NERDTreeBookmarks")
-        let bookmarks = bookmarks[0:-2] " Slices an empty last line
-        return map(bookmarks, "{'line': v:val, 'path': v:val}")
-    endfunction
+    "function! s:nerdtreeBookmarks()
+    "    let bookmarks = systemlist("cut -d' ' -f 2- ~/.NERDTreeBookmarks")
+    "    let bookmarks = bookmarks[0:-2] " Slices an empty last line
+    "    return map(bookmarks,
+    "    {'line': v:val, 'path': v:val}")
+    "endfunction
 
-    let g:startify_lists = [
-        \ { 'type': function('s:nerdtreeBookmarks'), 'header': ['   NERDTree Bookmarks']}
-        \]
+    "let g:startify_lists = [
+    "    \ { 'type': function('s:nerdtreeBookmarks'), 'header': ['   NERDTree Bookmarks']}
+    "    \]
 " }
-
-
-"----------------------------------------------------------------------
-" airline
-"----------------------------------------------------------------------
-if index(g:plugin_group, 'airline') >= 0
-	Plug 'vim-airline/vim-airline'
-	Plug 'vim-airline/vim-airline-themes'
-    "let g:airline#extensions#tabline#enabled = 1
-	"let g:airline_left_sep = ''
-	"let g:airline_left_alt_sep = ''
-	"let g:airline_right_sep = ''
-	"let g:airline_right_alt_sep = ''
-	"let g:airline_powerline_fonts = 0
-	"let g:airline_exclude_preview = 1
-	"let g:airline_section_b = '%n'
-	"let g:airline_theme='deus'
-	"let g:airline#extensions#branch#enabled = 0
-	"let g:airline#extensions#syntastic#enabled = 0
-	"let g:airline#extensions#fugitiveline#enabled = 0
-	"let g:airline#extensions#csv#enabled = 0
-	"let g:airline#extensions#vimagit#enabled = 0
 endif
 
 
+"----------------------------------------------------------------------
+" theme
+"----------------------------------------------------------------------
+if index(g:plugin_group, 'theme') >= 0
+    "Plug 'vim-airline/vim-airline'
+    "Plug 'vim-airline/vim-airline-themes'
+    Plug 'glepnir/spaceline.vim'
+    " Use the icon plugin for better behavior
+    Plug 'ryanoasis/vim-devicons'
 
+    let g:spaceline_seperate_style = 'arrow-fade'
+endif
+
+
+"----------------------------------------------------------------------
 
 	" 根据 quickfix 中匹配到的错误信息，高亮对应文件的错误行
 	" 使用 :RemoveErrorMarkers 命令或者 <space>ha 清除错误
@@ -129,7 +124,6 @@ endif
 	"let g:signify_vcs_cmds = {
 	"		\ 'git': 'git diff --no-color --diff-algorithm=histogram --no-ext-diff -U0 -- %f',
 	"		\}
-endif
 
 
     " 表格对齐，使用命令 Tabularize
@@ -140,39 +134,39 @@ endif
 
 
 " 文件浏览器，代替 netrw
-if index(g:plugin_group, 'dirvish') == 0
-    Plug 'justinmk/vim-dirvish'
-    "----------------------------------------------------------------------
-    " Dirvish 设置：自动排序并隐藏文件，同时定位到相关文件
-    " 这个排序函数可以将目录排在前面，文件排在后面，并且按照字母顺序排序
-    " 比默认的纯按照字母排序更友好点。
-    "----------------------------------------------------------------------
-    function! s:setup_dirvish()
-        if &buftype != 'nofile' && &filetype != 'dirvish'
-            return
-        endif
-        if has('nvim')
-            return
-        endif
-        " 取得光标所在行的文本（当前选中的文件名）
-        let text = getline('.')
-        if ! get(g:, 'dirvish_hide_visible', 0)
-            exec 'silent keeppatterns g@\v[\/]\.[^\/]+[\/]?$@d _'
-        endif
-        " 排序文件名
-        exec 'sort ,^.*[\/],'
-        let name = '^' . escape(text, '.*[]~\') . '[/*|@=|\\*]\=\%($\|\s\+\)'
-        " 定位到之前光标处的文件
-        call search(name, 'wc')
-        noremap <silent><buffer> ~ :Dirvish ~<cr>
-        noremap <buffer> % :e %
-    endfunc
-
-    augroup MyPluginSetup
-        autocmd!
-        autocmd FileType dirvish call s:setup_dirvish()
-    augroup END
-endif
+"if index(g:plugin_group, 'dirvish') == 0
+"    Plug 'justinmk/vim-dirvish'
+"    "----------------------------------------------------------------------
+"    " Dirvish 设置：自动排序并隐藏文件，同时定位到相关文件
+"    " 这个排序函数可以将目录排在前面，文件排在后面，并且按照字母顺序排序
+"    " 比默认的纯按照字母排序更友好点。
+"    "----------------------------------------------------------------------
+"    function! s:setup_dirvish()
+"        if &buftype != 'nofile' && &filetype != 'dirvish'
+"            return
+"        endif
+"        if has('nvim')
+"            return
+"        endif
+"        " 取得光标所在行的文本（当前选中的文件名）
+"        let text = getline('.')
+"        if ! get(g:, 'dirvish_hide_visible', 0)
+"            exec 'silent keeppatterns g@\v[\/]\.[^\/]+[\/]?$@d _'
+"        endif
+"        " 排序文件名
+"        exec 'sort ,^.*[\/],'
+"        let name = '^' . escape(text, '.*[]~\') . '[/*|@=|\\*]\=\%($\|\s\+\)'
+"        " 定位到之前光标处的文件
+"        call search(name, 'wc')
+"        noremap <silent><buffer> ~ :Dirvish ~<cr>
+"        noremap <buffer> % :e %
+"    endfunc
+"
+"    augroup MyPluginSetup
+"        autocmd!
+"        autocmd FileType dirvish call s:setup_dirvish()
+"    augroup END
+"endif
 
 
 "----------------------------------------------------------------------
@@ -254,6 +248,7 @@ if index(g:plugin_group, 'tags') >= 0
 
     " 设定项目目录标志：除了 .git/.svn 外，还有 .root 文件
     let g:gutentags_project_root = ['.root']
+    " 所生成的数据文件的名称
     let g:gutentags_ctags_tagfile = '.tags'
 
     " 默认生成的数据文件集中到 ~/.cache/tags 避免污染项目目录，好清理
@@ -279,7 +274,7 @@ if index(g:plugin_group, 'tags') >= 0
     let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
     " 使用 universal-ctags 的话需要下面这行，请反注释
-    " let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+    let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
     " 禁止 gutentags 自动链接 gtags 数据库
     let g:gutentags_auto_add_gtags_cscope = 0
@@ -458,7 +453,7 @@ endif
 if index(g:plugin_group, 'leaderf') >= 0
     " 如果 vim 支持 python 则启用  Leaderf
     if has('python') || has('python3')
-        Plug 'Yggdroot/LeaderF'
+        Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 
         " CTRL+p 打开文件模糊匹配
         let g:Lf_ShortcutF = '<c-p>'

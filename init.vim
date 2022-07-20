@@ -41,7 +41,7 @@ LoadScript config/config.vim
 LoadScript config/tabsize.vim
 
 " 插件加载
-LoadScript config/plugins.vim
+LoadScript config/plugin.vim
 
 " 界面样式
 LoadScript config/style.vim
