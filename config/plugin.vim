@@ -19,7 +19,7 @@ endfunc
 "----------------------------------------------------------------------
 " 在 ~/.vim/plugged 下安装插件
 "----------------------------------------------------------------------
-call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+call plug#begin(has('nvim') ? stdpath('data') . '/plugins' : '~/.vim/plugins')
     Plug 'junegunn/vim-plug'
 "----------------------------------------------------------------------
 " 基础插件
