@@ -82,9 +82,9 @@ endif
 if index(g:plugin_group, 'theme') >= 0
     "Plug 'vim-airline/vim-airline'
     "Plug 'vim-airline/vim-airline-themes'
-    Plug 'glepnir/spaceline.vim'
+"    Plug 'glepnir/spaceline.vim'
     " Use the icon plugin for better behavior
-    Plug 'ryanoasis/vim-devicons'
+"    Plug 'ryanoasis/vim-devicons'
 
     let g:spaceline_seperate_style = 'arrow-fade'
 endif
@@ -213,26 +213,6 @@ endif
 
 
 "----------------------------------------------------------------------
-" 增强插件
-"----------------------------------------------------------------------
-if index(g:plugin_group, 'enhanced') >= 0
-
-    " 用 v 选中一个区域后，ALT_+/- 按分隔符扩大/缩小选区
-    Plug 'terryma/vim-expand-region'
-
-    Plug 'tpope/vim-surround'
-
-    " 提供 gist 接口
-    "Plug 'mattn/vim-gist'
-    "Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
-
-    " ALT_+/- 用于按分隔符扩大缩小 v 选区
-    " map <m-=> <Plug>(expand_region_expand)
-    " map <m--> <Plug>(expand_region_shrink)
-endif
-
-
-"----------------------------------------------------------------------
 " 自动生成 ctags/gtags，并提供自动索引功能
 " 不在 git/svn 内的项目，需要在项目根目录 touch 一个空的 .root 文件
 " 详细用法见：https://zhuanlan.zhihu.com/p/36279445
@@ -284,7 +264,7 @@ endif
 "----------------------------------------------------------------------
 " 文本对象：textobj 全家桶
 "----------------------------------------------------------------------
-if index(g:plugin_group, 'textobj') >= 0
+if index(g:plugin_group, 'textobj') == 0
 
 	" 基础插件：提供让用户方便的自定义文本对象的接口
 	Plug 'kana/vim-textobj-user'
