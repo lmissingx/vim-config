@@ -35,16 +35,17 @@ set rtp+=~/.vim
 LoadScript config/basic.vim
 
 " 加载扩展配置
-"LoadScript config/config.vim
+"LoadScript config/extended.vim
 
 " 设定 tabsize
 "LoadScript config/tabsize.vim
 
-" 插件加载
-"LoadScript config/plugin.vim
-
 " 界面样式
-"LoadScript config/style.vim
+LoadScript config/style.vim
+
+" 插件加载
+LoadScript config/plugin.vim
+
 
 " 自定义按键
 " LoadScript config/keymaps.vim

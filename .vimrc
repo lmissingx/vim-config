@@ -18,6 +18,10 @@ if &compatible
     set nocompatible
 endif
 
+if filereadable(expand("~/.vimrc.plugin"))
+    source ~/.vimrc.plugin
+endif
+
 " Allow backspacing over everthing in insert mode
 set backspace=indent,eol,start
 
@@ -28,7 +32,7 @@ set showcmd    " 状态栏显示正在输入的命令(display incomplete command
 set wildmenu    " (display completion matches in a status line)
 set relativenumber number    " 显示行号和相对行号(display line number and relative number)
 "set gcr=a:blinkon0    " The cursor should look like in different modes.fully works in the GUI
-set visualbell        " 关闭声音(No sounds)
+"set visualbell        " 关闭声音(No sounds)
 set nowrap      " 不换行(Don't wrap lines)
 "set autoread      " 外部修改后自动重新加载(Reload files changed outside vim)
 "set clipboard=unnamed  " yank to the system register (*) by default
@@ -55,8 +59,14 @@ if &t_Co > 2 || has("gui_running")
     syntax enable
     syntax on
 
-    set background=dark
     set t_Co=256
+    if has('gui_running')
+        set background=light
+    else
+        set background=dark
+    endif
+    colorscheme hybrid
+
     " highlighting strings inside C comments.
     " Revert with ":unlet c_comment_strings".
     let c_comment_strings=1
@@ -102,6 +112,7 @@ set colorcolumn=+1,+2,+3    " 高亮最大宽度后面三列, (highlight column 
 " 设置colorcolumn列的颜色；例子 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 " (cterbg和guibg都可用数字代表各种颜色) 例如：ctermbg=6 guibg=#000000
 highlight ColorColumn ctermbg=6
+"highlight StatusLine ctermbg=7
 
 set cindent        " 使用C语言的缩进规则(Get the amount of indent for line according the C rules.
 set autoindent      " 起新行时复制前一行的缩进(Copy indent from current line when starting a new line)
@@ -128,17 +139,69 @@ autocmd InsertLeave * :set relativenumber    " 其他模式用相对行号
 
 "set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m  " 错误格式
 
+set laststatus=2                                " 0:不显示状态行 1:仅窗口大于1时显示 2:总是显示状态行
 set statusline=                                 " 清空状态了
-set statusline+=\ %F                            " 文件名
+set statusline+=%1*\ %F                           " 文件名
 set statusline+=\ [%1*%M%*%n%R%H]               " buffer 编号和状态
+"set statusline+=%0*\ \ %m%r%w\ %P\ \
 set statusline+=%=                              " 向右对齐
-set statusline+=\ %y                            " 文件类型
+set statusline+=%2*\ %y\                        " 文件类型
+set statusline+=%4*\ %{&ff}\                    "文件系统(dos/unix..)
+set statusline+=%5*\ [%{&spelllang}\%{HighlightSearch()}]\  "语言 & 是否高亮，H表示高亮?
+set statusline+=%8*\ %=\ row:%l/%L\ (%03p%%)\             "光标所在行号/总行数 (百分比)
+set statusline+=%9*\ col:%03c\                            "光标所在列
+
+function! HighlightSearch()
+      if &hls
+          return 'H'
+      else
+          return ''
+      endif
+endfunction
+hi User1 ctermfg=white  ctermbg=darkred
+hi User2 ctermfg=white  ctermbg=58
+hi User3 ctermfg=white  ctermbg=100
+hi User4 ctermfg=darkred  ctermbg=95
+hi User5 ctermfg=darkred  ctermbg=77
+hi User7 ctermfg=darkred  ctermbg=blue  cterm=bold
+hi User8 ctermfg=231  ctermbg=blue
+"hi User9 ctermfg=#ffffff  ctermbg=#810085
+hi User0 ctermfg=yellow  ctermbg=138
 
 " 最右边显示文件编码和行号等信息，并且固定在一个 group 中，优先占位
 " &ff: 显示文件格式(fileformat) [%0(%{&fenc}%)]:文件编码(fileencoding)
 " %v/%c:当前列号(current column)
 " %l:当前行号 %p:当前行占总行比率 %L:一共都多少行()
-set statusline+=\ %{&ff}/[%0(%{&fenc}%)]\ %c:%l[%p%%]/%L
+"set statusline+=\ %{&ff}/[%0(%{&fenc}%)]\ %c:%l[%p%%]/%L
+
+"set statusline=
+"set statusline+=%7*\[%n]                                  "buffernr
+"set statusline+=%1*\ %<%F\                                "文件路径
+"set statusline+=%2*\ %y\                                  "文件类型
+"set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}      "编码1
+"set statusline+=%3*\ %{(&bomb?\",BOM\":\"\")}\            "编码2
+"set statusline+=%4*\ %{&ff}\                              "文件系统(dos/unix..) 
+"set statusline+=%5*\ %{&spelllang}\%{HighlightSearch()}\  "语言 & 是否高亮，H表示高亮?
+"set statusline+=%8*\ %=\ row:%l/%L\ (%03p%%)\             "光标所在行号/总行数 (百分比)
+"set statusline+=%9*\ col:%03c\                            "光标所在列
+"set statusline+=%0*\ \ %m%r%w\ %P\ \                      "Modified? Read only? Top/bottom
+"function! HighlightSearch()
+"      if &hls
+"          return 'H'
+"      else
+"          return ''
+"      endif
+"endfunction
+"hi User1 ctermfg=white  ctermbg=darkred
+"hi User2 ctermfg=blue  ctermbg=58
+"hi User3 ctermfg=white  ctermbg=100
+"hi User4 ctermfg=darkred  ctermbg=95
+"hi User5 ctermfg=darkred  ctermbg=77
+"hi User7 ctermfg=darkred  ctermbg=blue  cterm=bold
+"hi User8 ctermfg=231  ctermbg=blue
+"hi User9 ctermfg=#ffffff  ctermbg=#810085
+"hi User0 ctermfg=yellow  ctermbg=138
+
 
 
 " set listchars=tab:\|\ ,trail:.,extends:>,precedes:<

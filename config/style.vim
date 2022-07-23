@@ -6,7 +6,7 @@
 set laststatus=2
 
 " 总是显示行号
-set number    " display line number
+"set number    " display line number
 
 " 总是显示侧边栏（用于显示 mark/gitdiff/诊断信息）
 set signcolumn=yes
@@ -18,36 +18,39 @@ set showtabline=2
 set list
 
 " 右下角显示命令
-set showcmd    " display incomplete commands
+"set showcmd    " display incomplete commands
 
 " 插入模式在状态栏下面显示 -- INSERT --，
 " 先注释掉，默认已经为真了，如果这里再设置一遍会影响 echodoc 插件
 " set showmode    " Show current mode down the bottom
 
 " 水平切割窗口时，默认在右边显示新窗口
-set splitright
+"set splitright
 
 
 " ========== 颜色主题：色彩文件位于 colors 目录中 ==========
 " 设置黑色背景
-set background=dark
+"set background=dark
 
 " 允许 256 色
-set t_Co=256
+"set t_Co=256
 
 " 设置颜色主题，会在所有 runtimepaths 的 colors 目录寻找同名配置
 " color desert256
 
 
 " ========== 状态栏设置 ==========
-set statusline=                                 " 清空状态了
-set statusline+=\ %F                            " 文件名
-set statusline+=\ [%1*%M%*%n%R%H]               " buffer 编号和状态
-set statusline+=%=                              " 向右对齐
-set statusline+=\ %y                            " 文件类型
+"set statusline=                                 " 清空状态了
+"set statusline+=\ %F                            " 文件名
+"set statusline+=\ [%1*%M%*%n%R%H]               " buffer 编号和状态
+"set statusline+=%=                              " 向右对齐
+"set statusline+=\ %y                            " 文件类型
 
 " 最右边显示文件编码和行号等信息，并且固定在一个 group 中，优先占位
-set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
+" &ff: 显示文件格式(fileformat) [%0(%{&fenc}%)]:文件编码(fileencoding) %v/%c:当前列号(current column)
+" %l:当前行号 %p:当前行占总行比率 %L:一共都多少行()
+"set statusline+=\ %{&ff}/[%0(%{&fenc}%)]\ %c:%l[%p%%]/%L
+"set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
 
 "set statusline=\ %{HasPaste()}%<%-15.25(%f%)%m%r%h\ %w\ \
 "set statusline+=\ \ \ [%{&ff}/%Y]

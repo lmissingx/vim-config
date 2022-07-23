@@ -5,15 +5,19 @@
 " python dependence:   pep8, pyflake
 
 " 非兼容vi模式。去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
-" set nocompatible
-"filetype off " required! turn off
+" Basics {
+    set nocompatible        " Must be first line
+    set background=dark     " Assume a dark background
+    filetype off " required! turn off
+" }
 
 " ################### 插件管理 ###################
 
 " inspired by spf13, 自定义需要的插件集合
 if !exists('g:plugin_group')
-	let g:plugin_group = ['git', 'nerdtree']
-"    let g:plugin_group += ['searching', 'textobj', 'filetypes']
+    let g:plugin_group = ['startup', 'themes', 'nerdtree', 'git']
+    let g:plugin_group += ['easymotion', 'fuzzySearch', 'tags']
+    let g:plugin_group += ['filetypes']
 "	let g:plugin_group += ['tags', 'nerdtree', 'ale']
 	"let g:plugin_group += ['leaderf']
 
@@ -34,54 +38,22 @@ endfunc
 call plug#begin(has('nvim') ? stdpath('data') . '/plugins' : '~/.vim/plugins')
     Plug 'junegunn/vim-plug'
 if index(g:plugin_group, 'startup') >= 0
-   " 展示开始画面，显示最近编辑过的文件
-   "Plug 'mhinz/vim-startify'
-" {
-    "let g:startify_session_dir = '~/.vim/session'
+endif
 
-    " Show modified and untracked git files
-    " returns all modified files of the current git repo
-    " `2>/dev/null` makes the command fail quietly, so that when we are not
-    " in a git repo, the list will be empty
-   " function! s:gitModified()
-   "     let files = systemlist('git ls-files -m 2>/dev/null')
-   "     return map(files, 
-   "     {'line': v:val, 'path': v:val}")
-   " endfunction
 
-    " same as above, but show untracked files, honouring .gitignore
-    "function! s:gitUntracked()
-    "    let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
-    "    return map(files, 
-    "    {'line': v:val, 'path': v:val}")
-    "endfunction
+"----------------------------------------------------------------------
+" theme
+"----------------------------------------------------------------------
+if index(g:plugin_group, 'themes') >= 0
+    "Plug 'vim-airline/vim-airline'
+    "Plug 'vim-airline/vim-airline-themes'
+    Plug 'altercation/vim-colors-solarized'
+    Plug 'w0ng/vim-hybrid'
+"    Plug 'glepnir/spaceline.vim'
+    " Use the icon plugin for better behavior
+"    Plug 'ryanoasis/vim-devicons'
 
-    "let g:startify_lists = [
-    "    \ { 'type': 'files',     'header': ['   MRU']            },
-    "    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-    "    \ { 'type': 'sessions',  'header': ['   Sessions']       },
-    "    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-    "    \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
-    "    \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
-    "    \ { 'type': 'commands',  'header': ['   Commands']       },
-    "    \ ]
-
-    " Use NERDTree bookmarks
-    "let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
-
-    " Display NERDTree bookmarks as a separate list
-    " Read ~/.NERDTreeBookmarks file and takes its second column
-    "function! s:nerdtreeBookmarks()
-    "    let bookmarks = systemlist("cut -d' ' -f 2- ~/.NERDTreeBookmarks")
-    "    let bookmarks = bookmarks[0:-2] " Slices an empty last line
-    "    return map(bookmarks,
-    "    {'line': v:val, 'path': v:val}")
-    "endfunction
-
-    "let g:startify_lists = [
-    "    \ { 'type': function('s:nerdtreeBookmarks'), 'header': ['   NERDTree Bookmarks']}
-    "    \]
-" }
+    "let g:spaceline_seperate_style = 'arrow-fade'
 endif
 
 
@@ -89,111 +61,13 @@ endif
 if index(g:plugin_group, 'nerdtree') >= 0
 	Plug 'preservim/nerdtree'
 	Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-	"let g:NERDTreeMinimalUI = 1
-	"let g:NERDTreeDirArrows = 1
-	"let g:NERDTreeHijackNetrw = 0
-    noremap <Space>n :NERDTreeFocus<CR>
-    noremap <Space>nt :NERDTreeToggle<CR>
+    let NERDTreeShowHidden=1
+    let NERDTreeIgnore = ['\.pyc$', '__pycache__']
     noremap <Space>nf :NERDTreeFind<CR>
 endif
 
 
-"----------------------------------------------------------------------
-" theme
-"----------------------------------------------------------------------
-if index(g:plugin_group, 'theme') >= 0
-    "Plug 'vim-airline/vim-airline'
-    "Plug 'vim-airline/vim-airline-themes'
-"    Plug 'glepnir/spaceline.vim'
-    " Use the icon plugin for better behavior
-"    Plug 'ryanoasis/vim-devicons'
-
-    let g:spaceline_seperate_style = 'arrow-fade'
-endif
-
-
-"----------------------------------------------------------------------
-
-	" 根据 quickfix 中匹配到的错误信息，高亮对应文件的错误行
-	" 使用 :RemoveErrorMarkers 命令或者 <space>ha 清除错误
-	" Plug 'mh21/errormarker.vim'
-
-	" 使用 ALT+e 会在不同窗口/标签上显示 A/B/C 等编号，然后字母直接跳转
-	" Plug 't9md/vim-choosewin'
-
-	" 提供基于 TAGS 的定义预览，函数参数预览，quickfix 预览
-	"Plug 'skywind3000/vim-preview'
-
-
-	" 使用 ALT+E 来选择窗口
-	" nmap <m-e> <Plug>(choosewin)
-
-	" 默认不显示 startify
-	"let g:startify_disable_at_vimenter = 1
-
-	" 使用 <space>ha 清除 errormarker 标注的错误
-	"noremap <silent><space>ha :RemoveErrorMarkers<cr>
-
-	" signify 调优
-	"let g:signify_vcs_list = ['git', 'svn']
-	"let g:signify_sign_add               = '+'
-	"let g:signify_sign_delete            = '_'
-	"let g:signify_sign_delete_first_line = '‾'
-	"let g:signify_sign_change            = '~'
-	"let g:signify_sign_changedelete      = g:signify_sign_change
-
-	" git 仓库使用 histogram 算法进行 diff
-	"let g:signify_vcs_cmds = {
-	"		\ 'git': 'git diff --no-color --diff-algorithm=histogram --no-ext-diff -U0 -- %f',
-	"		\}
-
-
-    " 表格对齐，使用命令 Tabularize
-    "Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-
-    " Diff 增强，支持 histogram / patience 等更科学的 diff 算法
-    "Plug 'chrisbra/vim-diff-enhanced'
-
-
-" 文件浏览器，代替 netrw
-"if index(g:plugin_group, 'dirvish') >= 0
-"    Plug 'justinmk/vim-dirvish'
-"    "----------------------------------------------------------------------
-"    " Dirvish 设置：自动排序并隐藏文件，同时定位到相关文件
-"    " 这个排序函数可以将目录排在前面，文件排在后面，并且按照字母顺序排序
-"    " 比默认的纯按照字母排序更友好点。
-"    "----------------------------------------------------------------------
-"    function! s:setup_dirvish()
-"        if &buftype != 'nofile' && &filetype != 'dirvish'
-"            return
-"        endif
-"        if has('nvim')
-"            return
-"        endif
-"        " 取得光标所在行的文本（当前选中的文件名）
-"        let text = getline('.')
-"        if ! get(g:, 'dirvish_hide_visible', 0)
-"            exec 'silent keeppatterns g@\v[\/]\.[^\/]+[\/]?$@d _'
-"        endif
-"        " 排序文件名
-"        exec 'sort ,^.*[\/],'
-"        let name = '^' . escape(text, '.*[]~\') . '[/*|@=|\\*]\=\%($\|\s\+\)'
-"        " 定位到之前光标处的文件
-"        call search(name, 'wc')
-"        noremap <silent><buffer> ~ :Dirvish ~<cr>
-"        noremap <buffer> % :e %
-"    endfunc
-"
-"    augroup MyPluginSetup
-"        autocmd!
-"        autocmd FileType dirvish call s:setup_dirvish()
-"    augroup END
-"endif
-
-
-"----------------------------------------------------------------------
-" Git
-"----------------------------------------------------------------------
+" ====================Git====================
 if index(g:plugin_group, 'git') >= 0
     " 用于在侧边符号栏显示 git/svn 的 diff
     " Plug 'mhinz/vim-signify'
@@ -213,24 +87,100 @@ endif
 
 
 "----------------------------------------------------------------------
-" Searching
+" LeaderF：CtrlP / FZF 的超级代替者，文件模糊匹配，tags/函数名 选择
 "----------------------------------------------------------------------
-if index(g:plugin_group, 'searching') >= 0
-    " 快速文件搜索
-    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+if index(g:plugin_group, 'fuzzySearch') >= 0
+    " 如果 vim 支持 python 则启用  Leaderf
+    if has('python') || has('python3')
+        Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+        let g:Lf_ShortcutF = '<C-p>'
+        " CTRL+n 打开最近使用的文件 MRU，进行模糊匹配
+        noremap <Space>fm :LeaderfMru<cr>
 
-    " 给不同语言提供字典补全，插入模式下 c-x c-k 触发
-    Plug 'skywind3000/vim-dict'
+        " ALT+p 打开函数列表，按 i 进入模糊匹配，ESC 退出
+        noremap <Space>ff :LeaderfFunction!<cr>
 
-    " 使用 :FlyGrep 命令进行实时 grep
-    " Plug 'wsdjeg/FlyGrep.vim'
+        " ALT+SHIFT+p 打开 tag 列表，i 进入模糊匹配，ESC退出
+        noremap <Space>fbt :LeaderfBufTag!<cr>
 
-    " 使用 :CtrlSF 命令进行模仿 sublime 的 grep
-    " Plug 'dyng/ctrlsf.vim'
+        " ALT+n 打开 buffer 列表进行模糊匹配
+        noremap <Space>fb :LeaderfBuffer<cr>
 
-    " 配对括号和引号自动补全
-    " Plug 'Raimondi/delimitMate'
-    " easily delete change and add such surroundings in pairs
+        " ALT+m 全局 tags 模糊匹配
+        noremap <Space>ft :LeaderfTag<cr>
+
+        " 最大历史文件保存 2048 个
+        let g:Lf_MruMaxFiles = 2048
+
+        " ui 定制
+        let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+
+        " 如何识别项目目录，从当前文件目录向父目录递归知道碰到下面的文件/目录
+        let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+        let g:Lf_WorkingDirectoryMode = 'Ac'
+        let g:Lf_WindowHeight = 0.30
+        let g:Lf_CacheDirectory = expand('~/.vim/cache')
+
+        " 显示绝对路径
+        let g:Lf_ShowRelativePath = 0
+        let g:Lf_HideHelp = 1
+
+        " 模糊匹配忽略扩展名
+        let g:Lf_WildIgnore = {
+            \ 'dir': ['.svn','.git','.hg'],
+            \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+            \ }
+
+        " MRU 文件忽略扩展名
+        let g:Lf_MruFileExclude = ['*.so', '*.exe', '*.py[co]', '*.sw?', '~$*', '*.bak', '*.tmp', '*.dll']
+        let g:Lf_StlColorscheme = 'powerline'
+
+        " 禁用 function/buftag 的预览功能，可以手动用 p 预览
+        let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+
+        " 使用 ESC 键可以直接退出 leaderf 的 normal 模式
+        let g:Lf_NormalMap = {
+            \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
+            \ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<cr>']],
+            \ "Mru": [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<cr>']],
+            \ "Tag": [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<cr>']],
+            \ "BufTag": [["<ESC>", ':exec g:Lf_py "bufTagExplManager.quit()"<cr>']],
+            \ "Function": [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<cr>']],
+            \ }
+
+    else
+        " 不支持 python ，使用 CtrlP 代替
+        Plug 'ctrlpvim/ctrlp.vim'
+
+        " 显示函数列表的扩展插件
+        Plug 'tacahiroy/ctrlp-funky'
+
+        " 忽略默认键位
+        let g:ctrlp_map = ''
+
+        " 模糊匹配忽略
+        let g:ctrlp_custom_ignore = {
+          \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+          \ 'file': '\v\.(exe|so|dll|mp3|wav|sdf|suo|mht)$',
+          \ 'link': 'some_bad_symbolic_links',
+          \ }
+
+        " 项目标志
+        let g:ctrlp_root_markers = ['.project', '.root', '.svn', '.git']
+        let g:ctrlp_working_path = 0
+
+        " CTRL+p 打开文件模糊匹配
+        noremap <Space>p :CtrlP<cr>
+
+        " CTRL+n 打开最近访问过的文件的匹配
+        noremap <Space>pm :CtrlPMRUFiles<cr>
+
+        " ALT+p 显示当前文件的函数列表
+        noremap <Space>pf :CtrlPFunky<cr>
+
+        " ALT+n 匹配 buffer
+        noremap <Space>pb :CtrlPBuffer<cr>
+    endif
 endif
 
 
@@ -247,6 +197,9 @@ if index(g:plugin_group, 'tags') >= 0
     " 提供 GscopeFind 命令并自动处理好 gtags 数据库切换
     " 支持光标移动到符号名上：<leader>cg 查看定义，<leader>cs 查看引用
     Plug 'skywind3000/gutentags_plus'
+
+    Plug 'preservim/tagbar'
+    nmap <Space>tb :TagbarToggle<CR>
 
     " 设定项目目录标志：除了 .git/.svn 外，还有 .root 文件
     let g:gutentags_project_root = ['.root']
@@ -433,107 +386,6 @@ if index(g:plugin_group, 'echodoc') >= 0
 	let g:echodoc#enable_at_startup = 1
 endif
 
-
-"----------------------------------------------------------------------
-" LeaderF：CtrlP / FZF 的超级代替者，文件模糊匹配，tags/函数名 选择
-"----------------------------------------------------------------------
-if index(g:plugin_group, 'leaderf') >= 0
-    " 如果 vim 支持 python 则启用  Leaderf
-    if has('python') || has('python3')
-        Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-
-        " CTRL+p 打开文件模糊匹配
-        let g:Lf_ShortcutF = '<c-p>'
-
-
-        " CTRL+n 打开最近使用的文件 MRU，进行模糊匹配
-        noremap <c-n> :LeaderfMru<cr>
-
-        " ALT+p 打开函数列表，按 i 进入模糊匹配，ESC 退出
-        noremap <m-p> :LeaderfFunction!<cr>
-
-        " ALT+SHIFT+p 打开 tag 列表，i 进入模糊匹配，ESC退出
-        noremap <m-P> :LeaderfBufTag!<cr>
-
-        " ALT+n 打开 buffer 列表进行模糊匹配
-        noremap <m-n> :LeaderfBuffer<cr>
-
-        " ALT+m 全局 tags 模糊匹配
-        noremap <m-m> :LeaderfTag<cr>
-
-        " 最大历史文件保存 2048 个
-        let g:Lf_MruMaxFiles = 2048
-
-        " ui 定制
-        let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
-
-        " 如何识别项目目录，从当前文件目录向父目录递归知道碰到下面的文件/目录
-        let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
-        let g:Lf_WorkingDirectoryMode = 'Ac'
-        let g:Lf_WindowHeight = 0.30
-        let g:Lf_CacheDirectory = expand('~/.vim/cache')
-
-        " 显示绝对路径
-        let g:Lf_ShowRelativePath = 0
-        let g:Lf_HideHelp = 1
-
-        " 模糊匹配忽略扩展名
-        let g:Lf_WildIgnore = {
-            \ 'dir': ['.svn','.git','.hg'],
-            \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
-            \ }
-
-        " MRU 文件忽略扩展名
-        let g:Lf_MruFileExclude = ['*.so', '*.exe', '*.py[co]', '*.sw?', '~$*', '*.bak', '*.tmp', '*.dll']
-        let g:Lf_StlColorscheme = 'powerline'
-
-        " 禁用 function/buftag 的预览功能，可以手动用 p 预览
-        let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
-
-        " 使用 ESC 键可以直接退出 leaderf 的 normal 模式
-        let g:Lf_NormalMap = {
-            \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
-            \ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<cr>']],
-            \ "Mru": [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<cr>']],
-            \ "Tag": [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<cr>']],
-            \ "BufTag": [["<ESC>", ':exec g:Lf_py "bufTagExplManager.quit()"<cr>']],
-            \ "Function": [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<cr>']],
-            \ }
-
-    else
-        " 不支持 python ，使用 CtrlP 代替
-        Plug 'ctrlpvim/ctrlp.vim'
-
-        " 显示函数列表的扩展插件
-        Plug 'tacahiroy/ctrlp-funky'
-
-        " 忽略默认键位
-        let g:ctrlp_map = ''
-
-        " 模糊匹配忽略
-        let g:ctrlp_custom_ignore = {
-          \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-          \ 'file': '\v\.(exe|so|dll|mp3|wav|sdf|suo|mht)$',
-          \ 'link': 'some_bad_symbolic_links',
-          \ }
-
-        " 项目标志
-        let g:ctrlp_root_markers = ['.project', '.root', '.svn', '.git']
-        let g:ctrlp_working_path = 0
-
-        " CTRL+p 打开文件模糊匹配
-        noremap <c-p> :CtrlP<cr>
-
-        " CTRL+n 打开最近访问过的文件的匹配
-        noremap <c-n> :CtrlPMRUFiles<cr>
-
-        " ALT+p 显示当前文件的函数列表
-        noremap <m-p> :CtrlPFunky<cr>
-
-        " ALT+n 匹配 buffer
-        noremap <m-n> :CtrlPBuffer<cr>
-    endif
-endif
 
 "----------------------------------------------------------------------
 " 结束插件安装
